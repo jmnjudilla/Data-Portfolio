@@ -1,0 +1,97 @@
+SELECT * FROM personal_finance.personal_transactions;
+SELECT DISTINCT(Category) FROM personal_finance.personal_transactions;
+SELECT COUNT(DISTINCT(Category)) FROM personal_finance.personal_transactions;
+SELECT DISTINCT(`Account Name`) FROM personal_finance.personal_transactions;
+SELECT Date FROM personal_finance.personal_transactions;
+
+--COUNT,SUM,MAX,MIN,AVG of Transaction Type
+SELECT 
+  `Transaction Type` AS Category,
+  COUNT(*) AS total_payments,
+  SUM(amount) AS total_spent, 
+  MAX(amount) AS max_spent, 
+  MIN(amount) AS min_spent,
+  AVG(amount) AS avg_spent
+FROM personal_finance.personal_transactions
+GROUP BY `Transaction Type`;
+
+--COUNT,SUM,MAX,MIN,AVG of Category
+SELECT 
+  Category,
+  COUNT(*) AS total_times_spent,
+  SUM(amount) AS total_spent, 
+  MAX(amount) AS most_expensive_purchase, 
+  MIN(amount) AS cheapest_purchase,
+  AVG(amount) AS average_purchase_amount
+FROM personal_finance.personal_transactions
+GROUP BY Category
+ORDER BY 3 DESC;
+
+--COUNT,SUM,MAX,MIN,AVG of Account Name
+SELECT 
+  `Account Name`,
+  COUNT(*) AS total_times_spent,
+  SUM(amount) AS total_spent, 
+  MAX(amount) AS most_expensive_purchase, 
+  MIN(amount) AS cheapest_purchase,
+  AVG(amount) AS average_purchase_amount
+FROM personal_finance.personal_transactions
+GROUP BY `Account Name`;
+
+--Total Expense
+SELECT 
+SUM(Amount) AS total_expense
+FROM personal_finance.personal_transactions
+WHERE `Transaction Type` = 'debit' OR Description = 'Credit Card Payment';
+
+--Total Income
+SELECT
+SUM(Amount) AS total_income
+FROM personal_finance.personal_transactions
+WHERE Description = 'Biweekly Paycheck';
+
+--Savings Rate (income-expenses)
+SELECT
+  SUM(
+    CASE 
+      WHEN `Transaction Type` = 'credit' AND Description != 'Credit Card Payment'
+      THEN Amount
+      ELSE 0
+    END
+  ) -
+  SUM(
+    CASE 
+      WHEN `Transaction Type` = 'debit' 
+        OR (`Transaction Type` = 'credit' AND Description = 'Credit Card Payment')
+      THEN Amount
+      ELSE 0
+    END
+  ) AS net_savings
+FROM personal_finance.personal_transactions;
+
+--Net Spending (expense - income)
+SELECT
+  SUM(
+    CASE 
+      WHEN `Transaction Type` = 'debit' 
+        OR (`Transaction Type` = 'credit' AND Description = 'Credit Card Payment')
+      THEN Amount
+      ELSE 0
+    END
+  ) -
+  SUM(
+    CASE 
+      WHEN `Transaction Type` = 'credit' AND Description != 'Credit Card Payment'
+      THEN Amount
+      ELSE 0
+    END
+  ) AS net_spending
+FROM personal_finance.personal_transactions;
+
+--Top 10 Largest Expenses
+SELECT
+amount
+FROM personal_finance.personal_transactions
+WHERE `Transaction Type` = 'debit' OR Description = 'Credit Card Payment'
+ORDER BY 1 DESC
+LIMIT 10;
