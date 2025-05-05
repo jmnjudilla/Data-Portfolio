@@ -4,40 +4,6 @@ SELECT COUNT(DISTINCT(Category)) FROM personal_finance.personal_transactions;
 SELECT DISTINCT(`Account Name`) FROM personal_finance.personal_transactions;
 SELECT Date FROM personal_finance.personal_transactions;
 
---COUNT,SUM,MAX,MIN,AVG of Transaction Type
-SELECT 
-  `Transaction Type` AS Category,
-  COUNT(*) AS total_payments,
-  SUM(amount) AS total_spent, 
-  MAX(amount) AS max_spent, 
-  MIN(amount) AS min_spent,
-  AVG(amount) AS avg_spent
-FROM personal_finance.personal_transactions
-GROUP BY `Transaction Type`;
-
---COUNT,SUM,MAX,MIN,AVG of Category
-SELECT 
-  Category,
-  COUNT(*) AS total_times_spent,
-  SUM(amount) AS total_spent, 
-  MAX(amount) AS most_expensive_purchase, 
-  MIN(amount) AS cheapest_purchase,
-  AVG(amount) AS average_purchase_amount
-FROM personal_finance.personal_transactions
-GROUP BY Category
-ORDER BY 3 DESC;
-
---COUNT,SUM,MAX,MIN,AVG of Account Name
-SELECT 
-  `Account Name`,
-  COUNT(*) AS total_times_spent,
-  SUM(amount) AS total_spent, 
-  MAX(amount) AS most_expensive_purchase, 
-  MIN(amount) AS cheapest_purchase,
-  AVG(amount) AS average_purchase_amount
-FROM personal_finance.personal_transactions
-GROUP BY `Account Name`;
-
 --Total Expense
 SELECT 
 SUM(Amount) AS total_expense
