@@ -61,3 +61,41 @@ FROM personal_finance.personal_transactions
 WHERE `Transaction Type` = 'debit' OR Description = 'Credit Card Payment'
 ORDER BY 1 DESC
 LIMIT 10;
+
+--Total Spent by Account Name
+SELECT
+	`Account Name`,
+  SUM(amount)
+FROM personal_finance.personal_transactions
+GROUP BY 1;
+
+--Total Spent by Category
+SELECT
+	Category,
+  SUM(amount)
+FROM personal_finance.personal_transactions
+GROUP BY 1;
+
+--Category that takes up the largest portion of the expenses
+SELECT
+	Category,
+  MAX(amount)
+FROM personal_finance.personal_transactions
+GROUP BY 1
+LIMIT 1;
+
+--Top Categories by Frequency
+SELECT
+Category,
+COUNT(*) as num_of_transactions
+FROM personal_finance.personal_transactions
+GROUP BY 1
+ORDER BY 2;
+
+--Largest Transaction by Category
+SELECT
+Category,
+MAX(amount)
+FROM personal_finance.personal_transactions
+GROUP BY 1
+ORDER BY 2;
